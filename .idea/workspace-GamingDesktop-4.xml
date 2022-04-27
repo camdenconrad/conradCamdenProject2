@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="Web app" />
+      <artifact name="conradCamdenProject2:jar" />
+    </artifacts-to-build>
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="891aed61-19e3-45c7-8a79-c8b85ce1af3f" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectId" id="25IlE06OtCoSxvc2KhSg0BulvSr" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;extract.method.default.visibility&quot;: &quot;protected&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/camde/OneDrive/conradCamdenProject2/out/artifacts/conradCamdenProject2_jar&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\camde\OneDrive\conradCamdenProject2\out\artifacts\conradCamdenProject2_jar" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\camde\OneDrive\conradCamdenProject2\External Libraries" />
+      <recent name="C:\Users\camde\OneDrive\conradCamdenProject2\Libraries" />
+      <recent name="C:\Users\camde\OneDrive\conradCamdenProject2\src" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/.idea" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="Main" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="conradCamdenProject2" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Jar" type="JarApplication">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Application.Main" />
+      <item itemvalue="JAR Application.Jar" />
+    </list>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="891aed61-19e3-45c7-8a79-c8b85ce1af3f" name="Changes" comment="" />
+      <created>1645222369592</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1645222369592</updated>
+      <workItem from="1645222447891" duration="53000" />
+      <workItem from="1645222526378" duration="14260000" />
+      <workItem from="1645243774204" duration="188000" />
+      <workItem from="1645244030143" duration="4000" />
+      <workItem from="1645490581671" duration="193000" />
+      <workItem from="1647486873130" duration="1691000" />
+      <workItem from="1647529034013" duration="1217000" />
+      <workItem from="1648151537867" duration="90000" />
+      <workItem from="1648154315925" duration="40000" />
+      <workItem from="1648659164001" duration="920000" />
+      <workItem from="1648660634364" duration="7706000" />
+      <workItem from="1648668828393" duration="810000" />
+      <workItem from="1648757307508" duration="3412000" />
+      <workItem from="1648829665518" duration="102000" />
+      <workItem from="1648835809345" duration="6002000" />
+      <workItem from="1648841839288" duration="328000" />
+      <workItem from="1648842409349" duration="48000" />
+      <workItem from="1648842532586" duration="600000" />
+      <workItem from="1650306265107" duration="330000" />
+      <workItem from="1650306729308" duration="18114000" />
+      <workItem from="1650394390210" duration="346000" />
+      <workItem from="1650395244424" duration="782000" />
+      <workItem from="1650396917806" duration="290000" />
+      <workItem from="1650398159192" duration="16296000" />
+      <workItem from="1650418716797" duration="52000" />
+      <workItem from="1650418804960" duration="9463000" />
+      <workItem from="1650428348377" duration="235000" />
+      <workItem from="1650472053475" duration="4989000" />
+      <workItem from="1650477912085" duration="39000" />
+      <workItem from="1650477968238" duration="8751000" />
+      <workItem from="1650491223778" duration="495000" />
+      <workItem from="1650491729396" duration="9608000" />
+      <workItem from="1650502511908" duration="8525000" />
+      <workItem from="1650515016368" duration="817000" />
+      <workItem from="1650516196041" duration="87000" />
+      <workItem from="1650516291167" duration="91000" />
+      <workItem from="1650516480668" duration="64000" />
+      <workItem from="1650582124956" duration="9000" />
+      <workItem from="1650582836495" duration="1256000" />
+      <workItem from="1650584106444" duration="77000" />
+      <workItem from="1650584236518" duration="373000" />
+      <workItem from="1650584639743" duration="32000" />
+      <workItem from="1650584682851" duration="31000" />
+      <workItem from="1650584870009" duration="131000" />
+      <workItem from="1650585167240" duration="1011000" />
+      <workItem from="1650586191655" duration="411000" />
+      <workItem from="1650587321464" duration="20000" />
+      <workItem from="1650587353683" duration="5518000" />
+      <workItem from="1650593013426" duration="371000" />
+      <workItem from="1650593566006" duration="14202000" />
+      <workItem from="1650645739362" duration="950000" />
+      <workItem from="1650898807566" duration="105000" />
+      <workItem from="1650997937132" duration="7430000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.util.InputMismatchException" package="java.util" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.util.ConcurrentModificationException" package="java.util" />
+          <option name="timeStamp" value="3" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.IllegalArgumentException" package="java.lang" />
+          <option name="timeStamp" value="4" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.NullPointerException" package="java.lang" />
+          <option name="timeStamp" value="9" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
