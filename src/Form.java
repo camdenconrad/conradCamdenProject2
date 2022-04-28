@@ -39,7 +39,7 @@ public class Form {
     private JButton openButton;
     private JButton addInventoryButton;
     private JScrollPane scrollPane;
-    private JTextField lastSavedTextField;
+    private JTextField debugField;
     private JTextField lastNameField;
     private JTextField emailField;
     private JTextField phoneNumberField;
@@ -422,12 +422,29 @@ public class Form {
         addMember.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Members.members.add(new Membership(
-                        isPremium.isSelected(),
-                        firstNameField.getText(),
-                        lastNameField.getText(), emailField.getText(),
-                        phoneNumberField.getText().replaceAll("-", "")));
-                System.out.println(Members.members);
+                boolean stillContinue = true;
+
+                // check if we already have member
+                for(int i = 0; i < memberModel.size(); i++) {
+                    if(Objects.equals(memberModel.get(i).getMemberPhone(), phoneNumberField.getText().replaceAll("-", ""))) {
+                        stillContinue = false;
+                        debugField.setText("Phone number is already in use."); // show debug
+                    }
+                    if(Objects.equals(memberModel.get(i).getMemberEmail(), emailField.getText())) {
+                        stillContinue = false;
+                        debugField.setText("Email is already in use."); // show debug
+                    }
+                }
+
+                // only adds member if we don't already have a member registered by phone number or email
+                if(stillContinue) {
+                    Members.members.add(new Membership(
+                            isPremium.isSelected(),
+                            firstNameField.getText(),
+                            lastNameField.getText(), emailField.getText(),
+                            phoneNumberField.getText().replaceAll("-", "")));
+                }
+                updateMembers();
             }
         });
         inventoryTab.addComponentListener(new ComponentAdapter() {
@@ -446,17 +463,25 @@ public class Form {
         });
     }
 
-    private void switchToMembers() {
-        inventoryList.setVisible(false);
-        membersList.setBackground(new Color(255, 255, 255));
-        membersList.setForeground(new Color(0, 0, 0));
+    // updates members pane
+    private void updateMembers() {
+        memberModel.clear();
 
-        for(Membership members : Members.members) {
+        for (Membership members : Members.members) {
             memberModel.addElement(members);
         }
 
-        membersList.setVisible(true);
         membersList.updateUI();
+    }
+
+    private void switchToMembers() {
+        middlePane.add(membersList);
+        membersList.setVisible(true);
+        inventoryList.setVisible(false);
+        membersList.setBackground(new Color(255, 255, 255));
+        membersList.setForeground(new Color(0, 0, 0));
+        typeTextField.setText("%-12s | %-12s | %-30s | %10s | Is premium:".formatted("First:", "Last:", "Email:", "###-###-####"));
+        updateMembers();
     }
 
     private void switchToInventory() {
@@ -548,11 +573,11 @@ public class Form {
             DateTimeFormatter dateAndTime = DateTimeFormatter.ofPattern("MM/dd/yyyy, HH:mm:ss");
             LocalDateTime now = LocalDateTime.now();
 
-            lastSavedTextField.setText("Last saved: " + dateAndTime.format(now));
+            debugField.setText("Last saved: " + dateAndTime.format(now));
 
 
         } catch (NullPointerException ex) {
-            lastSavedTextField.setText("Last saved: save failed");
+            debugField.setText("Last saved: save failed");
 
             // play sound
             Clip clip;
