@@ -180,7 +180,7 @@
                 <constraints/>
                 <properties/>
               </component>
-              <component id="de465" class="javax.swing.JTextField" binding="lastSavedTextField" default-binding="true">
+              <component id="de465" class="javax.swing.JTextField" binding="debugField" default-binding="true">
                 <constraints/>
                 <properties>
                   <editable value="false"/>
@@ -191,6 +191,7 @@
                   <opaque value="true"/>
                   <preferredSize width="182" height="0"/>
                   <text value="Last saved: "/>
+                  <toolTipText value="debug field"/>
                 </properties>
               </component>
               <component id="618fd" class="javax.swing.JLabel">

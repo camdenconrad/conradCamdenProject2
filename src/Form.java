@@ -22,24 +22,24 @@ public class Form {
     DefaultListModel<Membership> memberModel = new DefaultListModel<>();
     private JProgressBar progressBar1;
     private JPanel mainContainer;
-    private JComboBox itemChoice;
+    private JComboBox<String> itemChoice;
     private JTextField titleTextField;
     private JTextField authorTextField;
     private JTextField priceTextField;
     private JButton addInvButton;
     private JList<Item> inventoryList;
-    private JList<Membership> membersList;
+    private final JList<Membership> membersList;
     private JPanel middlePane;
     private JFormattedTextField typeTextField;
-    private JComboBox sorterField;
+    private JComboBox<String> sorterField;
     private JButton saveButton;
-    private JComboBox comboBox1;
+    private JComboBox<String> comboBox1;
     private JPanel sideBarRight;
     private JTextField displayTotal;
     private JButton openButton;
     private JButton addInventoryButton;
     private JScrollPane scrollPane;
-    private JTextField lastSavedTextField;
+    private JTextField debugField;
     private JTextField lastNameField;
     private JTextField emailField;
     private JTextField phoneNumberField;
@@ -211,11 +211,7 @@ public class Form {
 
 
         // AKA add button
-        addInvButton.addActionListener(e -> {
-
-            createInventory();
-
-        });
+        addInvButton.addActionListener(e -> createInventory());
         titleTextField.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -273,7 +269,7 @@ public class Form {
                     try {
                         clip = AudioSystem.getClip();
 
-                        clip.open(AudioSystem.getAudioInputStream(getClass().getResource("Sounds/click.wav")));
+                        clip.open(AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResource("Sounds/click.wav"))));
                         clip.start();
                     } catch (LineUnavailableException | UnsupportedAudioFileException | IOException ignored) {
                     }
@@ -318,52 +314,38 @@ public class Form {
         });
 
         // remove item from inventory
-        remove.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int c = JOptionPane.showConfirmDialog(remove, "Are you sure you want to remove " + "\"" + inventoryList.getSelectedValue().getName() + "\"?");
-                if (c == JOptionPane.YES_OPTION) { // check if user is sure about removing
-                    inventoryList.getSelectedValue().setInventory(0); // removes inventory - sets inventory to 0, thread automatically removes it
-                }
+        remove.addActionListener(e -> {
+            int c = JOptionPane.showConfirmDialog(remove, "Are you sure you want to remove " + "\"" + inventoryList.getSelectedValue().getName() + "\"?");
+            if (c == JOptionPane.YES_OPTION) { // check if user is sure about removing
+                inventoryList.getSelectedValue().setInventory(0); // removes inventory - sets inventory to 0, thread automatically removes it
             }
         });
 
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        saveButton.addActionListener(e -> {
 
-                try {
-                    doSave();
-                } catch (IOException ignored) {
-                }
+            try {
+                doSave();
+            } catch (IOException ignored) {
             }
-
         });
 
 
         // opens NEW inventory
-        openButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    readInNewInventory();
+        openButton.addActionListener(e -> {
+            try {
+                readInNewInventory();
 
-                } catch (FileNotFoundException ex) {
-                    throw new RuntimeException(ex);
-                }
+            } catch (FileNotFoundException ex) {
+                throw new RuntimeException(ex);
             }
         });
 
         // same thing as above, but doesn't clear inventory
-        addInventoryButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    Main.readInInventory();
-                } catch (FileNotFoundException ex) {
-                    throw new RuntimeException(ex);
-                }
+        addInventoryButton.addActionListener(e -> {
+            try {
+                Main.readInInventory();
+            } catch (FileNotFoundException ex) {
+                throw new RuntimeException(ex);
             }
         });
 
@@ -419,16 +401,45 @@ public class Form {
                 unfocused(phoneNumberField, "###-###-####");
             }
         });
-        addMember.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        addMember.addActionListener(e -> {
+            boolean stillContinue = true;
+
+            // check if we already have member
+            for(int i = 0; i < memberModel.size(); i++) {
+                if(Objects.equals(memberModel.get(i).getMemberPhone(), phoneNumberField.getText().replaceAll("-", ""))) {
+                    stillContinue = false;
+                    debugField.setText("Phone number is already in use."); // show debug
+                }
+                if(Objects.equals(memberModel.get(i).getMemberEmail(), emailField.getText())) {
+                    stillContinue = false;
+                    debugField.setText("Email is already in use."); // show debug
+                }
+            }
+
+            // only adds member if we don't already have a member registered by phone number or email
+            if(stillContinue) {
                 Members.members.add(new Membership(
                         isPremium.isSelected(),
                         firstNameField.getText(),
                         lastNameField.getText(), emailField.getText(),
-                        phoneNumberField.getText().replaceAll("-", "")));
-                System.out.println(Members.members);
+                        phoneNumberField.getText().replaceAll("-", ""))
+                );
+
+                // after we add a new member successfully lets reset the fields
+                isPremium.setSelected(false);
+
+                firstNameField.setForeground(unfocusedColor);
+                lastNameField.setForeground(unfocusedColor);
+                emailField.setForeground(unfocusedColor);
+                phoneNumberField.setForeground(unfocusedColor);
+
+                firstNameField.setText("First name");
+                lastNameField.setText("Last name");
+                emailField.setText("Email");
+                phoneNumberField.setText("###-###-####");
+
             }
+            updateMembers();
         });
         inventoryTab.addComponentListener(new ComponentAdapter() {
             @Override
@@ -446,17 +457,25 @@ public class Form {
         });
     }
 
-    private void switchToMembers() {
-        inventoryList.setVisible(false);
-        membersList.setBackground(new Color(255, 255, 255));
-        membersList.setForeground(new Color(0, 0, 0));
+    // updates members pane
+    private void updateMembers() {
+        memberModel.clear();
 
-        for(Membership members : Members.members) {
+        for (Membership members : Members.members) {
             memberModel.addElement(members);
         }
 
-        membersList.setVisible(true);
         membersList.updateUI();
+    }
+
+    private void switchToMembers() {
+        middlePane.add(membersList);
+        membersList.setVisible(true);
+        inventoryList.setVisible(false);
+        membersList.setBackground(new Color(255, 255, 255));
+        membersList.setForeground(new Color(0, 0, 0));
+        typeTextField.setText("%-12s | %-12s | %-30s | %10s | Is premium:".formatted("First:", "Last:", "Email:", "###-###-####"));
+        updateMembers();
     }
 
     private void switchToInventory() {
@@ -536,7 +555,7 @@ public class Form {
             try {
                 clip = AudioSystem.getClip();
 
-                clip.open(AudioSystem.getAudioInputStream(getClass().getResource("Sounds/save.wav")));
+                clip.open(AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResource("Sounds/save.wav"))));
                 clip.start();
             } catch (LineUnavailableException | UnsupportedAudioFileException | IOException ignored) {
             }
@@ -548,18 +567,18 @@ public class Form {
             DateTimeFormatter dateAndTime = DateTimeFormatter.ofPattern("MM/dd/yyyy, HH:mm:ss");
             LocalDateTime now = LocalDateTime.now();
 
-            lastSavedTextField.setText("Last saved: " + dateAndTime.format(now));
+            debugField.setText("Last saved: " + dateAndTime.format(now));
 
 
         } catch (NullPointerException ex) {
-            lastSavedTextField.setText("Last saved: save failed");
+            debugField.setText("Last saved: save failed");
 
             // play sound
             Clip clip;
             try {
                 clip = AudioSystem.getClip();
 
-                clip.open(AudioSystem.getAudioInputStream(getClass().getResource("Sounds/saveFailed.wav")));
+                clip.open(AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResource("Sounds/saveFailed.wav"))));
                 clip.start();
             } catch (LineUnavailableException | UnsupportedAudioFileException | IOException ignored) {
             }
@@ -583,6 +602,7 @@ public class Form {
         return sorterField.getSelectedIndex();
     }
 
+    @SuppressWarnings("DuplicatedCode")
     public void readInNewInventory() throws FileNotFoundException {
 
         System.out.print("Enter file path for inventory: ");

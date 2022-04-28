@@ -129,4 +129,8 @@ public class Membership {
     public double getTotalSpent() {
         return totalSpent;
     }
+
+    public String toString() {
+        return ("%-12s | %-12s | %-30s | %s-%s-%s | Is premium: %b".formatted(this.getMemberFirstName(), this.getMemberLastName(), this.getMemberEmail(), this.getMemberPhone().substring(0,3),this.getMemberPhone().substring(3,6),this.getMemberPhone().substring(6,10), this.isPremium()));
+    }
 }
