@@ -5,6 +5,8 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -24,7 +26,7 @@ public class Form {
     public Thread updateInventoryList;
     DefaultListModel<Item> inventoryModel = new DefaultListModel<>();
     DefaultListModel<Membership> memberModel = new DefaultListModel<>();
-    DefaultListModel<Item> purchaseModel = new DefaultListModel<>();
+    DefaultListModel<String> purchaseModel = new DefaultListModel<>();
     private JProgressBar progressBar1;
     private JPanel mainContainer;
     private JComboBox<String> itemChoice;
@@ -54,16 +56,22 @@ public class Form {
     private JPanel inventoryTab;
     private JPanel membersTab;
     private JComboBox<String> memberChooser;
-    private JList purchaseList;
+    private JList<String> purchaseList;
     private JPanel purchaseTab;
+    private JPanel purchasePanel;
+    private JPanel purchaseDisplay;
+    private JTextField orderTotal;
+    private JButton completeOrder;
+
+    private Order orderRef = new Order(); // guest member
+
+    // atomic reference allows us to switch between different orders and members willy nilly however and whenever we want
+    AtomicReference<Order> order = new AtomicReference<>(orderRef); // guest members order is the ref - so we can switch back to guest members order if we want
 
 
     @SuppressWarnings({"BoundFieldAssignment", "BusyWait"})
     public Form() {
 
-        Order orderRef = new Order(); // guest member
-
-        AtomicReference<Order> order = new AtomicReference<>(orderRef); // guest members order is the ref
         memberChooser.setSelectedIndex(0);
 
         scrollPane.getVerticalScrollBar().setUnitIncrement(16); // increase scroll speed
@@ -123,6 +131,10 @@ public class Form {
                 }
 
                 mainContainer.updateUI(); // updates main UI
+
+                if(inventoryModel.size() == 0) {
+                    // want to show that theres nothing in the inventory
+                }
 
                 // calls sorter based on sort selection
                 //ID
@@ -337,7 +349,6 @@ public class Form {
             if (memberChooser.getSelectedIndex() == 0) {
                 assert false;
                 order.set(orderRef);
-                order.get().setMember(new Membership()); // if guest member is chosen
             } else {
                 assert false;
                 order.set((memberModel.get(memberChooser.getSelectedIndex() - 1)).getOrder()); // this is GNARLY
@@ -348,9 +359,9 @@ public class Form {
             }
 
             order.get().addToOrder(inventoryList.getSelectedValue()); // add selected item to order
-            purchaseModel.addElement(inventoryList.getSelectedValue()); // add item to list that shows order
             System.out.println(order);
-            purchaseList.updateUI();
+
+            updatePurchaseList(); // update
 
 
         });
@@ -496,10 +507,49 @@ public class Form {
                 switchToPurchase();
             }
         });
+        memberChooser.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updatePurchaseList();
+                System.err.println("Updated order list UI");
+            }
+        });
+        // completes order
+        completeOrder.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+    }
+
+    private void updatePurchaseList() {
+        // we need to update the selected order
+        if (memberChooser.getSelectedIndex() == 0) {
+            order.set(orderRef);
+        } else {
+            try {
+                order.set((memberModel.get(memberChooser.getSelectedIndex() - 1)).getOrder());
+            } catch (ArrayIndexOutOfBoundsException ignored){} // I have no idea why this is thrown
+        }
+
+        purchaseModel.clear(); // clear list
+
+        // update list
+        for (int i = 0; i < order.get().getArray().size(); i++) {
+            System.err.println("Order size: " + order.get().getArray().size());
+            purchaseModel.addElement(order.get().getArray().get(i).getName());
+        }
+
+        orderTotal.setText("Total: $%.2f".formatted(order.get().orderCost));
+
+        purchaseDisplay.updateUI();
     }
 
     @SuppressWarnings("BoundFieldAssignment")
     private void switchToPurchase() {
+
+        int quickStore = memberChooser.getSelectedIndex(); // store selected index
 
         switchToInventory(); // display inventory over member list
         memberChooser.removeAllItems(); // clear list of members before adding new
@@ -517,6 +567,17 @@ public class Form {
         }
 
         purchaseList = new JList<>(purchaseModel);
+        purchaseDisplay.add(purchaseList);
+
+        memberChooser.setSelectedIndex(quickStore); // keep currently selected customer
+
+        if (memberChooser.getSelectedIndex() == 0) {
+            order.set(orderRef);
+        } else {
+            order.set((memberModel.get(memberChooser.getSelectedIndex() - 1)).getOrder());
+        }
+
+        updatePurchaseList();
 
 
     }

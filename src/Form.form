@@ -45,7 +45,9 @@
                   <inheritsPopupMenu value="true"/>
                   <layoutOrientation value="1"/>
                   <minimumSize width="100" height="100"/>
-                  <model/>
+                  <model>
+                    <item value="Nothing to display"/>
+                  </model>
                   <preferredSize width="570" height="570"/>
                   <selectionBackground color="-10302380"/>
                   <selectionMode value="0"/>
@@ -686,7 +688,7 @@
             </properties>
             <border type="none"/>
             <children>
-              <grid id="9f886" layout-manager="FlowLayout" hgap="10" vgap="0" flow-align="2">
+              <grid id="9f886" binding="purchasePanel" layout-manager="FlowLayout" hgap="10" vgap="0" flow-align="2">
                 <constraints border-constraint="East"/>
                 <properties>
                   <background color="-855310"/>
@@ -712,22 +714,23 @@
                     <children>
                       <component id="5bde" class="javax.swing.JComboBox" binding="memberChooser">
                         <constraints>
-                          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="1.0" weighty="1.0"/>
                         </constraints>
                         <properties>
                           <doubleBuffered value="false"/>
-                          <maximumSize width="20" height="20"/>
-                          <minimumSize width="20" height="0"/>
+                          <maximumSize width="40" height="180"/>
+                          <minimumSize width="10" height="10"/>
                           <model>
                             <item value="Guest Member"/>
                           </model>
-                          <preferredSize width="20" height="20"/>
+                          <opaque value="false"/>
+                          <preferredSize width="4" height="15"/>
                         </properties>
                       </component>
-                      <component id="d0da2" class="javax.swing.JButton">
+                      <component id="d0da2" class="javax.swing.JButton" binding="completeOrder">
                         <constraints>
-                          <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                          <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="1.0" weighty="1.0"/>
                         </constraints>
                         <properties>
@@ -751,13 +754,13 @@
                       </component>
                       <hspacer id="921d9">
                         <constraints>
-                          <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                       </hspacer>
                       <hspacer id="55da0">
                         <constraints>
-                          <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="11" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                       </hspacer>
@@ -796,13 +799,14 @@
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                       </vspacer>
-                      <component id="c8533" class="javax.swing.JTextField">
+                      <component id="c8533" class="javax.swing.JTextField" binding="orderTotal">
                         <constraints>
-                          <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                          <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="1.0" weighty="1.0"/>
                         </constraints>
                         <properties>
                           <doubleBuffered value="false"/>
+                          <editable value="false"/>
                           <horizontalAlignment value="10"/>
                           <minimumSize width="49" height="0"/>
                           <preferredSize width="49" height="20"/>
@@ -811,7 +815,7 @@
                       </component>
                       <hspacer id="a63e7">
                         <constraints>
-                          <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                       </hspacer>
@@ -824,24 +828,41 @@
                       </component>
                       <component id="7e4c9" class="javax.swing.JSeparator">
                         <constraints>
-                          <grid row="11" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                          <grid row="12" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                         <properties/>
                       </component>
-                      <component id="d2a39" class="javax.swing.JList" binding="purchaseList">
+                      <hspacer id="a9232">
                         <constraints>
-                          <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                            <preferred-size width="150" height="50"/>
-                          </grid>
+                          <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                      </hspacer>
+                      <grid id="b6fd8" binding="purchaseDisplay" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints>
+                          <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                         <properties>
-                          <maximumSize width="64" height="20"/>
-                          <model/>
-                          <preferredSize width="64" height="20"/>
+                          <preferredSize width="64" height="120"/>
                         </properties>
-                      </component>
+                        <border type="none"/>
+                        <children>
+                          <component id="d2a39" class="javax.swing.JList" binding="purchaseList">
+                            <constraints border-constraint="Center"/>
+                            <properties>
+                              <doubleBuffered value="true"/>
+                              <layoutOrientation value="0"/>
+                              <maximumSize width="200" height="500"/>
+                              <model/>
+                              <opaque value="false"/>
+                              <preferredSize width="100" height="80"/>
+                              <selectionMode value="0"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
                     </children>
                   </grid>
                 </children>

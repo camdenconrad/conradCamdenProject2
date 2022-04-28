@@ -3,6 +3,10 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class Order {
 
+    public ArrayList<Item> getArray() {
+        return order;
+    }
+
     private final ArrayList<Item> order = new ArrayList<>();
     public double orderCost = 0.0;
     Receipts currentReceipts = null;
