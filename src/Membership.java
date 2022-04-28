@@ -143,6 +143,10 @@ public class Membership {
     }
 
     public String toString() {
-        return ("%-12s | %-12s | %-30s | %s-%s-%s | Is premium: %b".formatted(this.getMemberFirstName(), this.getMemberLastName(), this.getMemberEmail(), this.getMemberPhone().substring(0, 3), this.getMemberPhone().substring(3, 6), this.getMemberPhone().substring(6, 10), this.isPremium()));
+        try {
+            return ("%-12s | %-12s | %-30s | %s-%s-%s | Is premium: %b".formatted(this.getMemberFirstName(), this.getMemberLastName(), this.getMemberEmail(), this.getMemberPhone().substring(0, 3), this.getMemberPhone().substring(3, 6), this.getMemberPhone().substring(6, 10), this.isPremium()));
+        } catch (StringIndexOutOfBoundsException ignored) {
+            return ("%-12s | %-12s | %-30s | %12s | Is premium: %b".formatted(this.getMemberFirstName(), this.getMemberLastName(), this.getMemberEmail(), "Failed", this.isPremium()));
+        }
     }
 }

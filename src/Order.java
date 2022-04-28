@@ -7,6 +7,7 @@ public class Order {
     public double orderCost = 0.0;
     Receipts currentReceipts = null;
     private Membership member = new Membership(); // guest member
+
     public Order() {
     }
 

@@ -21,10 +21,13 @@ public class Form {
     private static final Color unfocusedColor = new Color(155, 155, 155);
     private static final Color focusedColor = new Color(0, 0, 0);
     private final JList<Membership> membersList;
+    private final Order orderRef = new Order(); // guest member
     public Thread updateInventoryList;
     DefaultListModel<Item> inventoryModel = new DefaultListModel<>();
     DefaultListModel<Membership> memberModel = new DefaultListModel<>();
     DefaultListModel<String> purchaseModel = new DefaultListModel<>();
+    // atomic reference allows us to switch between different orders and members willy-nilly however and whenever we want
+    AtomicReference<Order> order = new AtomicReference<>(orderRef); // guest members order is the ref - so we can switch back to guest members order if we want
     private int membersSignedUp = 0;
     private int totalSales = 0;
     private double totalRevenue = 0;
@@ -63,9 +66,7 @@ public class Form {
     private JPanel purchaseDisplay;
     private JTextField orderTotal;
     private JButton completeOrder;
-    private final Order orderRef = new Order(); // guest member
-    // atomic reference allows us to switch between different orders and members willy-nilly however and whenever we want
-    AtomicReference<Order> order = new AtomicReference<>(orderRef); // guest members order is the ref - so we can switch back to guest members order if we want
+
     @SuppressWarnings({"BoundFieldAssignment", "BusyWait"})
     public Form() {
 
@@ -520,10 +521,10 @@ public class Form {
         completeOrder.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                order.get().purchaseOrder(inventory); // completes the purchase
-
                 totalRevenue += order.get().orderCost;
                 totalSales++;
+
+                order.get().purchaseOrder(inventory); // completes the purchase
 
                 updatePurchaseList();
 
@@ -729,7 +730,6 @@ public class Form {
             debugField.setText("Last saved: " + dateAndTime.format(now));
 
 
-
         } catch (NullPointerException ex) {
             debugField.setText("Last saved: save failed");
 
@@ -771,8 +771,7 @@ public class Form {
             if (c == JOptionPane.YES_OPTION) {
                 doReadIn();
             }
-        }
-        else {
+        } else {
             doReadIn();
         }
 
@@ -780,7 +779,6 @@ public class Form {
 
     @SuppressWarnings("DuplicatedCode")
     private void doReadIn() {
-        System.out.print("Enter file path for inventory: ");
         //Scanner reader = new Scanner(new File(new Scanner(System.in).nextLine()));
 
         try {
