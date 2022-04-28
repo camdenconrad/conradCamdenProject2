@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class Order {
 
@@ -21,18 +20,11 @@ public class Order {
     addToOrder limit to in-stock inventory
      */
 
-    public Order(AtomicReference<Membership> membership) {
-    }
-
     public ArrayList<Item> getArray() {
         return order;
     }
 
-    public Receipts getCurrentReceipts() {
-        return currentReceipts;
-    }
-
-    public boolean addToOrder(Item item) {
+    public void addToOrder(Item item) {
         // check if item is in inventory
         if (Inventory.inventory.contains(item)) {
             this.order.add(item);
@@ -40,23 +32,7 @@ public class Order {
             // add price
             orderCost += item.getPrice();
 
-            return true;
         }
-        return false;
-    }
-
-    public boolean addToOrder(Item item, int amount) {
-        if (Inventory.inventory.contains(item)) {
-            if (item.getInventory() >= amount) {
-                for (int i = 0; i < amount; i++) {
-                    this.order.add(item);
-                    orderCost += item.getPrice();
-                    item.sellInventory(1);
-                }
-                return true;
-            }
-        }
-        return false;
     }
 
     public boolean subtractFromOrder(Item item) {
@@ -66,16 +42,9 @@ public class Order {
         return true;
     }
 
-    public boolean subtractFromOrder(Item item, int amount) {
-        for (int i = 0; i < amount; i++) {
-            this.order.remove(item);
-        }
-        return true;
-    }
-
     public void purchaseOrder(Inventory inventory) {
         if (member.isPremium()) {
-            if (!member.hasPayed()) {
+            if (member.hasPayed()) {
                 orderCost = member.premiumPrice();
             } else
                 orderCost = 0;
@@ -96,7 +65,7 @@ public class Order {
         member.addRecipient((receipt));
         member.addNewTransaction(getOrderCost());
 
-        if (member.isPremium() && !member.hasPayed()) {
+        if (member.isPremium() && member.hasPayed()) {
             member.setHasPayed(true);
         }
 

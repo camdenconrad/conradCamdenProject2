@@ -25,11 +25,7 @@ public class CD extends Item {
 
     @Override
     public int compareTo(Item item) {
-        if (item.getInventory() > this.getInventory())
-            return 1;
-        if (item.getInventory() < this.getInventory())
-            return -1;
-        return 0;
+        return Integer.compare(item.getInventory(), this.getInventory());
     }
 
     @Override

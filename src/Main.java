@@ -19,12 +19,12 @@ public class Main {
 
     public static File inventoryFile;
 
-    public static FlatLightLaf laf = new FlatLightLaf();
+    public static FlatLightLaf laf = new FlatLightLaf(); // external library
 
 
     // MAIN
 
-    public static void main(String[] args) throws IOException, UnsupportedLookAndFeelException {
+    public static void main(String[] args) throws UnsupportedLookAndFeelException {
 
         FlatLaf.setGlobalExtraDefaults(Collections.singletonMap("@accentColor", "#F37A10")); // changes accent color
 
@@ -48,11 +48,13 @@ public class Main {
         }
         // I have no idea why this gets thrown
         catch (ConcurrentModificationException ignored) {
+            System.err.println("createInventoryFile(): ConcurrentModificationException thrown. Trying again.");
             createInventoryFile(); // try until saving works
         }
     }
 
     // reads inventory off a file
+    @SuppressWarnings("DuplicatedCode")
     public static void readInInventory() throws FileNotFoundException {
 
         //Scanner reader = new Scanner(new File(new Scanner(System.in).nextLine()));
@@ -100,7 +102,7 @@ public class Main {
             }
 
         } catch (NullPointerException ignored) {
-            System.out.println("File manager closed.");
+            System.err.println("File manager closed.");
         }
 
     }
@@ -114,6 +116,7 @@ public class Main {
             writeFile(writer);
             return true;
         } catch (IOException | NullPointerException ignored) {
+            System.err.println("File location not specified");
             return false;
         }
     }

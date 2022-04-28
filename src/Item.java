@@ -1,11 +1,11 @@
 import java.util.Random;
 
 public abstract class Item implements Comparable<Item>, TypeItem {
-    public String name = null;
-    public String author = null;
+    public String name;
+    public String author;
     public int id;
-    public int inventory = 0;
-    public double price = 0;
+    public int inventory;
+    public double price;
 
     public Item(String name, String author, int inventory, double price) {
         this.name = name;
@@ -27,24 +27,12 @@ public abstract class Item implements Comparable<Item>, TypeItem {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getAuthor() {
         return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
     }
 
     public double getPrice() {
@@ -61,16 +49,8 @@ public abstract class Item implements Comparable<Item>, TypeItem {
         this.inventory -= sold;
     }
 
-    public void returnInventory(int returned) {
-        this.inventory += returned;
-    }
-
     public void addInventory(int added) {
         this.inventory += added;
-    }
-
-    public void removeInventory() {
-        this.inventory = 0;
     }
 
     public int getInventory() {

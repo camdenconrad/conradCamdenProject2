@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Membership {
 
     private static final double premiumPrice = 5.00;
-    private final ArrayList<Receipts> allPurchases = new ArrayList<Receipts>();
+    private final ArrayList<Receipts> allPurchases = new ArrayList<>();
     private boolean isPremium;
     private boolean hasPayed;
     private boolean autoChargeEnabled; // keeps track of payment method
@@ -14,16 +14,6 @@ public class Membership {
     private double totalSpent;
     private Order order;
 
-    public Membership(boolean isPremium, boolean hasPayed, boolean autoChargeEnabled, String memberFirstName, String memberLastName, String memberEmail, String memberPhone) {
-        this.isPremium = isPremium;
-        this.hasPayed = hasPayed;
-        this.autoChargeEnabled = autoChargeEnabled;
-        this.memberFirstName = memberFirstName;
-        this.memberLastName = memberLastName;
-        this.memberEmail = memberEmail;
-        this.memberPhone = memberPhone;
-    }
-
     public Membership() {
         this.isPremium = false;
         this.hasPayed = false;
@@ -32,16 +22,6 @@ public class Membership {
         this.memberLastName = "Member";
         this.memberEmail = null;
         this.memberPhone = null;
-    }
-
-    public Membership(String memberFirstName, String memberLastName, String memberEmail, String memberPhone) {
-        this.memberFirstName = memberFirstName;
-        this.memberLastName = memberLastName;
-        this.memberEmail = memberEmail;
-        this.memberPhone = memberPhone;
-        this.isPremium = false;
-        this.hasPayed = false;
-        this.autoChargeEnabled = false;
     }
 
     public Membership(boolean isPremium, String memberFirstName, String memberLastName, String memberEmail, String memberPhone) {
@@ -74,7 +54,7 @@ public class Membership {
     }
 
     public boolean hasPayed() {
-        return hasPayed;
+        return !hasPayed;
     }
 
     public void setHasPayed(boolean hasPayed) {

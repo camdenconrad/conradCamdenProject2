@@ -158,6 +158,7 @@ public class Form {
                     }
                     // null pointer exception thrown when loading in NEW inventory through open button
                 } catch (ConcurrentModificationException | NullPointerException ignored) {
+                    System.err.println("ConcurrentModificationException: Resetting inventory");
                     inventoryModel.clear(); // exceptions only thrown when inventory is changing, so we'll just clear it and skip further exceptions
                 }
 
@@ -184,6 +185,7 @@ public class Form {
                     displayTotal.setText("Total: $%.2f".formatted(inventory.getInventoryTotal()));
 
                 } catch (ConcurrentModificationException ignored) {
+                    System.err.println("ConcurrentModificationException: Resetting inventory");
                     inventoryModel.clear();
                 }
 
@@ -291,6 +293,7 @@ public class Form {
                         clip.open(AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResource("Sounds/click.wav"))));
                         clip.start();
                     } catch (LineUnavailableException | UnsupportedAudioFileException | IOException ignored) {
+                        System.err.println("Sound could not play.");
                     }
                     /// /// //
 
@@ -312,6 +315,7 @@ public class Form {
                                 try {
                                     inventory.restockProduct(inventoryList.getSelectedValue().getId(), Integer.parseInt(restockAmount.getText()));
                                 } catch (NumberFormatException | NullPointerException ignored) {
+                                    System.err.println("Could not restock product.");
                                     restockAmount.setText(null);
                                 }
                                 restockAmount.setText(null);
@@ -367,7 +371,9 @@ public class Form {
                 if (c == JOptionPane.YES_OPTION) { // check if user is sure about removing
                     inventoryList.getSelectedValue().setInventory(0); // removes inventory - sets inventory to 0, thread automatically removes it
                 }
-            } catch(NullPointerException ignored){}
+            } catch (NullPointerException ignored) {
+                System.err.println("NullPointerException: No item selected.");
+            }
         });
 
         addToOrder.addActionListener(e -> {
@@ -384,12 +390,14 @@ public class Form {
                 order.get().setMember(memberModel.get(memberChooser.getSelectedIndex() - 1)); // get chosen member
             }
             try {
-            if (inventoryList.getSelectedValue().inventory >= amountInOrder()) {
+                if (inventoryList.getSelectedValue().inventory >= amountInOrder()) {
                     order.get().addToOrder(inventoryList.getSelectedValue()); // add selected item to order
-            } else {
-                debugField.setText("Sold out");
+                } else {
+                    debugField.setText("Sold out");
+                }
+            } catch (NullPointerException ignored) {
+                System.err.println("NullPointerException: No item selected.");
             }
-            } catch(NullPointerException ignored){}
 
             updatePurchaseList(); // update
 
@@ -401,6 +409,7 @@ public class Form {
             try {
                 doSave();
             } catch (IOException ignored) {
+                System.err.println("Save failed.");
             }
         });
 
@@ -411,6 +420,7 @@ public class Form {
                 readInNewInventory();
 
             } catch (FileNotFoundException ex) {
+                System.err.println("Open failed.");
                 throw new RuntimeException(ex);
             }
         });
@@ -420,6 +430,7 @@ public class Form {
             try {
                 Main.readInInventory();
             } catch (FileNotFoundException ex) {
+                System.err.println("Read failed.");
                 throw new RuntimeException(ex);
             }
         });
@@ -560,6 +571,7 @@ public class Form {
                     clip.open(AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResource("Sounds/checkout.wav"))));
                     clip.start();
                 } catch (LineUnavailableException | UnsupportedAudioFileException | IOException ignore) {
+                    System.err.println("Sound could not play.");
                 }
 
             }
@@ -702,6 +714,7 @@ public class Form {
             try {
                 inventory.getItem(title, author).setPrice(Double.parseDouble(priceTextField.getText()));
             } catch (Exception ignored) {
+                System.err.println("Item with issues.");
             }
         }
 
@@ -711,6 +724,7 @@ public class Form {
             try {
                 inventory.getItem(title, author).setPrice(Double.parseDouble(priceTextField.getText()));
             } catch (Exception ignored) {
+                System.err.println("Item with issues.");
             }
         }
 
@@ -720,6 +734,7 @@ public class Form {
             try {
                 inventory.getItem(title, author).setPrice(Double.parseDouble(priceTextField.getText().replaceAll("\\$", "").strip()));
             } catch (Exception ignored) {
+                System.err.println("Item with issues.");
             }
         }
 
@@ -750,6 +765,7 @@ public class Form {
                 clip.open(AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResource("Sounds/save.wav"))));
                 clip.start();
             } catch (LineUnavailableException | UnsupportedAudioFileException | IOException ignored) {
+                System.err.println("Sound could not play.");
             }
 
             // show that save was successful
@@ -766,6 +782,7 @@ public class Form {
 
         } catch (NullPointerException ex) {
             debugField.setText("Last saved: save failed");
+            System.err.println("Save failed.");
 
             // play sound
             Clip clip;
@@ -775,10 +792,11 @@ public class Form {
                 clip.open(AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResource("Sounds/saveFailed.wav"))));
                 clip.start();
             } catch (LineUnavailableException | UnsupportedAudioFileException | IOException ignored) {
+                System.err.println("Sound could not play.");
             }
 
             // if new save works
-            if(Main.createNewSave()) {
+            if (Main.createNewSave()) {
                 // gets current date and time
                 DateTimeFormatter dateAndTime = DateTimeFormatter.ofPattern("MM/dd/yyyy, HH:mm:ss");
                 LocalDateTime now = LocalDateTime.now();
@@ -791,6 +809,7 @@ public class Form {
                     clip.start();
                 } catch (LineUnavailableException | UnsupportedAudioFileException | IOException ignored) {
                     debugField.setText("Last saved: save failed");
+                    System.err.println("Save failed.");
 
                     // play sound
                     try {
@@ -799,6 +818,7 @@ public class Form {
                         clip.open(AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResource("Sounds/saveFailed.wav"))));
                         clip.start();
                     } catch (LineUnavailableException | UnsupportedAudioFileException | IOException ignore) {
+                        System.err.println("Sound could not play.");
                     }
                 }
             }
@@ -890,6 +910,7 @@ public class Form {
             updatePurchaseList(); // update UI
 
         } catch (NullPointerException | IOException ignored) {
+            System.err.println("Read in failed.");
         }
     }
 }

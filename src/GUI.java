@@ -15,7 +15,7 @@ public class GUI {
         form = new Form();
     }
 
-    public GUI() throws IOException {
+    public GUI() {
 
 
         // getClass().getResource("/Icons/home.png")

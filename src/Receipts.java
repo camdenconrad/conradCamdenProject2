@@ -4,6 +4,7 @@ public class Receipts {
 
     public String receiptText = "";
 
+    @SuppressWarnings("StringConcatenationInLoop")
     public void generateReceipt(ArrayList<Item> order) {
 
         // clear receipt
@@ -18,9 +19,4 @@ public class Receipts {
 
     }
 
-    public String getReceipt(ArrayList<Item> order) {
-        generateReceipt(order);
-
-        return receiptText;
-    }
 }

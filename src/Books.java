@@ -7,14 +7,6 @@ public class Books extends Item {
     //productID, type, title, author, numInStock, price
 
 
-    public Books(String name, String author, int inventory, double price) {
-        super(name, author, inventory, price);
-    }
-
-    public Books(int id, String name, String author, int inventory, double price) {
-        super(id, name, author, inventory, price);
-    }
-
     public Books(String name, String author) {
         super(name, author, 1, 9.99);
     }
@@ -26,11 +18,7 @@ public class Books extends Item {
 
     @Override
     public int compareTo(Item item) {
-        if (item.getInventory() > this.getInventory())
-            return 1;
-        if (item.getInventory() < this.getInventory())
-            return -1;
-        return 0;
+        return Integer.compare(item.getInventory(), this.getInventory());
     }
 
     @Override
