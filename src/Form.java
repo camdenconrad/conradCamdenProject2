@@ -527,6 +527,14 @@ public class Form {
                 order.get().purchaseOrder(inventory); // completes the purchase
 
                 updatePurchaseList();
+                Clip clip;
+                try {
+                    clip = AudioSystem.getClip();
+
+                    clip.open(AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResource("Sounds/checkout.wav"))));
+                    clip.start();
+                } catch (LineUnavailableException | UnsupportedAudioFileException | IOException ignore) {
+                }
 
             }
         });
@@ -743,7 +751,31 @@ public class Form {
             } catch (LineUnavailableException | UnsupportedAudioFileException | IOException ignored) {
             }
 
-            Main.createNewSave();
+            // if new save works
+            if(Main.createNewSave()) {
+                // gets current date and time
+                DateTimeFormatter dateAndTime = DateTimeFormatter.ofPattern("MM/dd/yyyy, HH:mm:ss");
+                LocalDateTime now = LocalDateTime.now();
+                debugField.setText("Last saved: " + dateAndTime.format(now));
+
+                try {
+                    clip = AudioSystem.getClip();
+
+                    clip.open(AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResource("Sounds/save.wav"))));
+                    clip.start();
+                } catch (LineUnavailableException | UnsupportedAudioFileException | IOException ignored) {
+                    debugField.setText("Last saved: save failed");
+
+                    // play sound
+                    try {
+                        clip = AudioSystem.getClip();
+
+                        clip.open(AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResource("Sounds/saveFailed.wav"))));
+                        clip.start();
+                    } catch (LineUnavailableException | UnsupportedAudioFileException | IOException ignore) {
+                    }
+                }
+            }
         }
 
         // reactivate button

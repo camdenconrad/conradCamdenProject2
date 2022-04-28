@@ -107,12 +107,15 @@ public class Main {
     }
 
 
-    public static void createNewSave() {
+    public static boolean createNewSave() {
         try {
-            FileWriter writer = new FileWriter(gui.createFile()); // this saves the updated inventory file at the same place that we opened the initial file from
+            inventoryFile = gui.createFile();
+            FileWriter writer = new FileWriter(inventoryFile); // this saves the updated inventory file at the same place that we opened the initial file from
 
             writeFile(writer);
-        } catch (IOException ignored) {
+            return true;
+        } catch (IOException | NullPointerException ignored) {
+            return false;
         }
     }
 

@@ -1,12 +1,9 @@
 |End Of Day Report|
-Time of report: 04/28/2022, 00:54:27
-Total revenue: $39.96
-Total sales: 1
-Total members registered: 2
+Time of report: 04/28/2022, 01:26:20
+Total revenue: $0.00
+Total sales: 0
+Total members registered: 0
 
 Items purchased:
-        ID | Type | Title                                    | Author
-         1 | Book | fahrenheit 451                           | ray bradbury             
-         1 | Book | fahrenheit 451                           | ray bradbury             
-         1 | Book | fahrenheit 451                           | ray bradbury             
-         1 | Book | fahrenheit 451                           | ray bradbury             
+        ID | Type | Title                | Author                    
+End.

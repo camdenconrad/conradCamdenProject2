@@ -54,8 +54,9 @@ public class GUI {
         finder.setDialogTitle("Open save directory");
         finder.setSelectedFile(new File(finder.getCurrentDirectory() + "/newInventory.csv"));
 
-        if (finder.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)
-            return new File(finder.getCurrentDirectory() + "/newInventory.csv");
+        if (finder.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+            return new File(finder.getSelectedFile().getAbsolutePath());
+        }
         return null;
     }
 }
