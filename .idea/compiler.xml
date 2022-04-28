@@ -2,7 +2,7 @@
 <project version="4">
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="conradCamdenProject2" options="--add-exports java.desktop/com.apple.eio=ALL-UNNAMED" />
+      <module name="conradCamdenProject3" options="--add-exports java.desktop/com.apple.eio=ALL-UNNAMED" />
     </option>
   </component>
 </project>

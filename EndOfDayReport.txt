@@ -1,13 +1,15 @@
 |End Of Day Report|
-Time of report: 04/28/2022, 12:24:35
-Total revenue: $42.97
+Time of report: 04/28/2022, 13:05:02
+Total revenue: $23.94
 Total sales: 2
 Total members registered: 1
 
 Items purchased:
         ID | Type | Title                | Author                    
-         5 | Book | the little prince    | antoine de saint exupéry 
-         1 | Book | fahrenheit 451       | ray bradbury             
-         3 | Book | to kill a mockingbird | harper lee               
-         3 | Book | to kill a mockingbird | harper lee               
+        13 |   CD | a hard day's night   | the beatles              
+        13 |   CD | a hard day's night   | the beatles              
+        13 |   CD | a hard day's night   | the beatles              
+        13 |   CD | a hard day's night   | the beatles              
+        13 |   CD | a hard day's night   | the beatles              
+        13 |   CD | a hard day's night   | the beatles              
 End.
