@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Main {
@@ -471,10 +473,31 @@ public class Main {
         FlatLaf.setGlobalExtraDefaults(Collections.singletonMap("@accentColor", accent)); // changes accent color
     }
 
-    public static void writeEndOfDayReport() {
+    public static void writeEndOfDayReport() throws IOException {
         //This file should include what products were purchased,
         // how many new members were registered,
         // total sales and revenue, and any other information you think is relevant.
+
+        FileWriter writer = new FileWriter(inventoryFile.getParent() + "/EndOfDayReport.txt");
+
+        DateTimeFormatter dateAndTime = DateTimeFormatter.ofPattern("MM/dd/yyyy, HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+
+        writer.write("|End Of Day Report|");
+        writer.write("\nTime of report: " + dateAndTime.format(now));
+        writer.write("\nTotal revenue: $%.2f".formatted(gui.getForm().getTotalRevenue()));
+        writer.write("\nTotal members registered: %s".formatted(gui.getForm().getMembersSignedUp()));
+        writer.write(("\n%10s | %4s | %-40s | %-25s ".formatted("ID", "Type", "Title", "Author")));
+
+        writer.write("\nItems purchased:");
+        for (Item item : AllOrders.orderList) {
+            writer.write("\n" + "%10d | %4s | %-40s | %-25s".formatted(item.getId(), item.getType(), item.getName(), item.getAuthor()));
+        }
+
+        writer.close();
+
+
+
     }
 
 }

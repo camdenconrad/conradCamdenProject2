@@ -89,6 +89,8 @@ public class Order {
         Receipts receipt = new Receipts();
         this.currentReceipts = receipt;
 
+        AllOrders.addOrder(order); // add to order list
+
         receipt.generateReceipt(order);
         member.addRecipient((receipt));
         member.addNewTransaction(getOrderCost());

@@ -64,7 +64,7 @@ public class Form {
     private JTextField orderTotal;
     private JButton completeOrder;
     private final Order orderRef = new Order(); // guest member
-    // atomic reference allows us to switch between different orders and members willy nilly however and whenever we want
+    // atomic reference allows us to switch between different orders and members willy-nilly however and whenever we want
     AtomicReference<Order> order = new AtomicReference<>(orderRef); // guest members order is the ref - so we can switch back to guest members order if we want
     @SuppressWarnings({"BoundFieldAssignment", "BusyWait"})
     public Form() {
@@ -130,7 +130,7 @@ public class Form {
                 mainContainer.updateUI(); // updates main UI
 
                 if (inventoryModel.size() == 0) {
-                    // want to show that theres nothing in the inventory
+                    // want to show that there's nothing in the inventory
                 }
 
                 // calls sorter based on sort selection
@@ -350,7 +350,7 @@ public class Form {
                 assert false;
                 order.set((memberModel.get(memberChooser.getSelectedIndex() - 1)).getOrder()); // this is GNARLY
                 // so every order has a member ^
-                // and ever member has an order ^
+                // and every member has an order ^
                 // so we can switch between members and orders ^
                 order.get().setMember(memberModel.get(memberChooser.getSelectedIndex() - 1)); // get chosen member
             }
@@ -724,7 +724,10 @@ public class Form {
             DateTimeFormatter dateAndTime = DateTimeFormatter.ofPattern("MM/dd/yyyy, HH:mm:ss");
             LocalDateTime now = LocalDateTime.now();
 
+            Main.writeEndOfDayReport(); // create report
+
             debugField.setText("Last saved: " + dateAndTime.format(now));
+
 
 
         } catch (NullPointerException ex) {
@@ -759,9 +762,24 @@ public class Form {
         return sorterField.getSelectedIndex();
     }
 
-    @SuppressWarnings("DuplicatedCode")
     public void readInNewInventory() throws FileNotFoundException {
 
+        // are you sure you want to read in new inventory?
+        if (inventoryModel.size() != 0) {
+
+            int c = JOptionPane.showConfirmDialog(null, "Are you sure you want to open a new inventory?");
+            if (c == JOptionPane.YES_OPTION) {
+                doReadIn();
+            }
+        }
+        else {
+            doReadIn();
+        }
+
+    }
+
+    @SuppressWarnings("DuplicatedCode")
+    private void doReadIn() {
         System.out.print("Enter file path for inventory: ");
         //Scanner reader = new Scanner(new File(new Scanner(System.in).nextLine()));
 
@@ -812,10 +830,16 @@ public class Form {
 
             }
 
+            // clear all orders
+            for (Membership member : Members.members) {
+                member.getOrder().getArray().clear();
+            }
+            orderRef.getArray().clear();
+            updatePurchaseList(); // update UI
+
         } catch (NullPointerException ignored) {
             System.out.println("File manager closed.");
         } catch (IOException ignored) {
         }
-
     }
 }
