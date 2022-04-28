@@ -471,4 +471,10 @@ public class Main {
         FlatLaf.setGlobalExtraDefaults(Collections.singletonMap("@accentColor", accent)); // changes accent color
     }
 
+    public static void writeEndOfDayReport() {
+        //This file should include what products were purchased,
+        // how many new members were registered,
+        // total sales and revenue, and any other information you think is relevant.
+    }
+
 }

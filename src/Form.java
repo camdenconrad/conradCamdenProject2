@@ -5,8 +5,6 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -27,6 +25,9 @@ public class Form {
     DefaultListModel<Item> inventoryModel = new DefaultListModel<>();
     DefaultListModel<Membership> memberModel = new DefaultListModel<>();
     DefaultListModel<String> purchaseModel = new DefaultListModel<>();
+    private int membersSignedUp = 0;
+    private int totalSales = 0;
+    private double totalRevenue = 0;
     private JProgressBar progressBar1;
     private JPanel mainContainer;
     private JComboBox<String> itemChoice;
@@ -62,13 +63,9 @@ public class Form {
     private JPanel purchaseDisplay;
     private JTextField orderTotal;
     private JButton completeOrder;
-
-    private Order orderRef = new Order(); // guest member
-
+    private final Order orderRef = new Order(); // guest member
     // atomic reference allows us to switch between different orders and members willy nilly however and whenever we want
     AtomicReference<Order> order = new AtomicReference<>(orderRef); // guest members order is the ref - so we can switch back to guest members order if we want
-
-
     @SuppressWarnings({"BoundFieldAssignment", "BusyWait"})
     public Form() {
 
@@ -132,7 +129,7 @@ public class Form {
 
                 mainContainer.updateUI(); // updates main UI
 
-                if(inventoryModel.size() == 0) {
+                if (inventoryModel.size() == 0) {
                     // want to show that theres nothing in the inventory
                 }
 
@@ -358,8 +355,11 @@ public class Form {
                 order.get().setMember(memberModel.get(memberChooser.getSelectedIndex() - 1)); // get chosen member
             }
 
-            order.get().addToOrder(inventoryList.getSelectedValue()); // add selected item to order
-            System.out.println(order);
+            if (inventoryList.getSelectedValue().inventory >= amountInOrder()) {
+                order.get().addToOrder(inventoryList.getSelectedValue()); // add selected item to order
+            } else {
+                debugField.setText("Sold out");
+            }
 
             updatePurchaseList(); // update
 
@@ -470,6 +470,8 @@ public class Form {
                         phoneNumberField.getText().replaceAll("-", ""))
                 );
 
+                membersSignedUp++;
+
                 // after we add a new member successfully lets reset the fields
                 isPremium.setSelected(false);
 
@@ -518,9 +520,37 @@ public class Form {
         completeOrder.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                order.get().purchaseOrder(inventory); // completes the purchase
+
+                totalRevenue += order.get().orderCost;
+                totalSales++;
+
+                updatePurchaseList();
 
             }
         });
+    }
+
+    public int getMembersSignedUp() {
+        return membersSignedUp;
+    }
+
+    public int getTotalSales() {
+        return totalSales;
+    }
+
+    public double getTotalRevenue() {
+        return totalRevenue;
+    }
+
+    private int amountInOrder() {
+        int i = 1; // accumulator
+        for (Item item : order.get().getArray()) {
+            if (item.equals(inventoryList.getSelectedValue()))
+                i++;
+        }
+        System.err.println("amountInOrder return: " + (i));
+        return i;
     }
 
     private void updatePurchaseList() {
@@ -530,7 +560,8 @@ public class Form {
         } else {
             try {
                 order.set((memberModel.get(memberChooser.getSelectedIndex() - 1)).getOrder());
-            } catch (ArrayIndexOutOfBoundsException ignored){} // I have no idea why this is thrown
+            } catch (ArrayIndexOutOfBoundsException ignored) {
+            } // I have no idea why this is thrown
         }
 
         purchaseModel.clear(); // clear list

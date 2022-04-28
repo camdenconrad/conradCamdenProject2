@@ -3,16 +3,16 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class Order {
 
-    public ArrayList<Item> getArray() {
-        return order;
-    }
-
     private final ArrayList<Item> order = new ArrayList<>();
     public double orderCost = 0.0;
     Receipts currentReceipts = null;
     private Membership member = new Membership(); // guest member
-
     public Order() {
+    }
+
+    public Order(Membership member) {
+        this.member = member;
+        member.setOrder(this);
     }
 
     /*
@@ -20,12 +20,11 @@ public class Order {
     addToOrder limit to in-stock inventory
      */
 
-    public Order(Membership member) {
-        this.member = member;
-        member.setOrder(this);
+    public Order(AtomicReference<Membership> membership) {
     }
 
-    public Order(AtomicReference<Membership> membership) {
+    public ArrayList<Item> getArray() {
+        return order;
     }
 
     public Receipts getCurrentReceipts() {
@@ -84,7 +83,7 @@ public class Order {
 
         for (Item item : order) {
             orderCost += item.getPrice();
-            inventory.sell(item, 0);
+            inventory.sell(item, 1);
         }
 
         Receipts receipt = new Receipts();
@@ -97,6 +96,10 @@ public class Order {
         if (member.isPremium() && !member.hasPayed()) {
             member.setHasPayed(true);
         }
+
+        //clear inventory when were done with purchase
+        this.order.clear();
+        orderCost = 0; // reset order cost
 
         //System.out.println(receipt.getReceipt(order));
 

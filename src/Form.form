@@ -738,17 +738,19 @@
                           <background color="-1"/>
                           <borderPainted value="false"/>
                           <hideActionText value="true"/>
-                          <horizontalAlignment value="0"/>
-                          <horizontalTextPosition value="0"/>
-                          <iconTextGap value="0"/>
+                          <horizontalAlignment value="2"/>
+                          <horizontalTextPosition value="11"/>
+                          <icon value="Icons/checkout.png"/>
+                          <iconTextGap value="4"/>
                           <inheritsPopupMenu value="false"/>
-                          <label value="Complete"/>
+                          <label value="Checkout"/>
                           <maximumSize width="78" height="20"/>
                           <minimumSize width="78" height="3"/>
                           <name value=""/>
                           <opaque value="true"/>
+                          <pressedIcon value="Icons/checkoutClicked.png"/>
                           <selected value="true"/>
-                          <text value="Complete"/>
+                          <text value="Checkout"/>
                           <toolTipText value=""/>
                         </properties>
                       </component>
