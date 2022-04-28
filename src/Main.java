@@ -452,7 +452,7 @@ public class Main {
     }
 
     protected static void writeFile(FileWriter writer) throws IOException {
-        if(Inventory.inventory.size() != 0) {
+        if (Inventory.inventory.size() != 0) {
             for (Item item : Inventory.inventory) {
                 //productID, type, title, author, numInStock, price
                 writer.append(String.valueOf(item.getId())).append(", ");
@@ -465,6 +465,10 @@ public class Main {
 
             writer.close();
         }
+    }
+
+    public static void changeAccentColor(String accent) {
+        FlatLaf.setGlobalExtraDefaults(Collections.singletonMap("@accentColor", accent)); // changes accent color
     }
 
 }

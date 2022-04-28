@@ -12,6 +12,7 @@ public class Membership {
     private String memberEmail;
     private String memberPhone;
     private double totalSpent;
+    private Order order;
 
     public Membership(boolean isPremium, boolean hasPayed, boolean autoChargeEnabled, String memberFirstName, String memberLastName, String memberEmail, String memberPhone) {
         this.isPremium = isPremium;
@@ -51,6 +52,17 @@ public class Membership {
         this.isPremium = isPremium;
         this.hasPayed = false;
         this.autoChargeEnabled = false;
+    }
+
+    public Order getOrder() {
+        if (order == null) {
+            return new Order(this);
+        }
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public boolean isPremium() {
@@ -131,6 +143,6 @@ public class Membership {
     }
 
     public String toString() {
-        return ("%-12s | %-12s | %-30s | %s-%s-%s | Is premium: %b".formatted(this.getMemberFirstName(), this.getMemberLastName(), this.getMemberEmail(), this.getMemberPhone().substring(0,3),this.getMemberPhone().substring(3,6),this.getMemberPhone().substring(6,10), this.isPremium()));
+        return ("%-12s | %-12s | %-30s | %s-%s-%s | Is premium: %b".formatted(this.getMemberFirstName(), this.getMemberLastName(), this.getMemberEmail(), this.getMemberPhone().substring(0, 3), this.getMemberPhone().substring(3, 6), this.getMemberPhone().substring(6, 10), this.isPremium()));
     }
 }

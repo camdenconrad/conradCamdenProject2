@@ -18,6 +18,7 @@ public class Order {
 
     public Order(Membership member) {
         this.member = member;
+        member.setOrder(this);
     }
 
     public Order(AtomicReference<Membership> membership) {

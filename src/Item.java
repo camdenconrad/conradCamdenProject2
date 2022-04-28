@@ -82,7 +82,7 @@ public abstract class Item implements Comparable<Item>, TypeItem {
     }
 
     public String toString() {
-        return ("%10d | %4s | %-40s | %-25s | In stock: %3d | Price: $%6.2f".formatted(this.getId(), this.getType(), getSubstring(this.getName(), 39), getSubstring(this.getAuthor(),24), this.getInventory(), this.getPrice()));
+        return ("%10d | %4s | %-40s | %-25s | In stock: %3d | Price: $%6.2f".formatted(this.getId(), this.getType(), getSubstring(this.getName(), 39), getSubstring(this.getAuthor(), 24), this.getInventory(), this.getPrice()));
     }
 
     // cleans up names that are too long to display cleanly in inventory

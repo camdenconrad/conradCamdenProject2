@@ -22,7 +22,7 @@ public class Inventory implements BookstoreSpecification {
                 while (true) {
                     try {
                         //noinspection BusyWait
-                        Thread.sleep(0,1); // limits thread from eating cpu alive - can be increased if program is running sluggish
+                        Thread.sleep(0, 1); // limits thread from eating cpu alive - can be increased if program is running sluggish
                     } catch (InterruptedException ignored) {
                     }
                     if (inventory.size() != 0) {
@@ -31,7 +31,8 @@ public class Inventory implements BookstoreSpecification {
                         }
                         // ignore exceptions, because thread will re-loop and fix itself
                         //ArrayIndexOutOfBoundsException will be thrown when loading in a new inventory
-                        catch (ConcurrentModificationException | NullPointerException | ArrayIndexOutOfBoundsException ignored) {
+                        catch (ConcurrentModificationException | NullPointerException |
+                               ArrayIndexOutOfBoundsException ignored) {
                         }
                     }
 

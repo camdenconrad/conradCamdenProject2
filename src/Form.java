@@ -10,16 +10,21 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Form {
     private static final Inventory inventory = new Inventory();
     private static final Color unfocusedColor = new Color(155, 155, 155);
     private static final Color focusedColor = new Color(0, 0, 0);
+    private final JList<Membership> membersList;
+    public Thread updateInventoryList;
     DefaultListModel<Item> inventoryModel = new DefaultListModel<>();
     DefaultListModel<Membership> memberModel = new DefaultListModel<>();
+    DefaultListModel<Item> purchaseModel = new DefaultListModel<>();
     private JProgressBar progressBar1;
     private JPanel mainContainer;
     private JComboBox<String> itemChoice;
@@ -28,7 +33,6 @@ public class Form {
     private JTextField priceTextField;
     private JButton addInvButton;
     private JList<Item> inventoryList;
-    private final JList<Membership> membersList;
     private JPanel middlePane;
     private JFormattedTextField typeTextField;
     private JComboBox<String> sorterField;
@@ -49,12 +53,18 @@ public class Form {
     private JTextField searchBar;
     private JPanel inventoryTab;
     private JPanel membersTab;
-
-    public Thread updateInventoryList;
+    private JComboBox<String> memberChooser;
+    private JList purchaseList;
+    private JPanel purchaseTab;
 
 
     @SuppressWarnings({"BoundFieldAssignment", "BusyWait"})
     public Form() {
+
+        Order orderRef = new Order(); // guest member
+
+        AtomicReference<Order> order = new AtomicReference<>(orderRef); // guest members order is the ref
+        memberChooser.setSelectedIndex(0);
 
         scrollPane.getVerticalScrollBar().setUnitIncrement(16); // increase scroll speed
         inventoryList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // supposed to limit selection to only one line... doesn't seem to work
@@ -74,12 +84,12 @@ public class Form {
 
         typeTextField.setText("%10s | %4s | %-40s | %-25s | %-12s  | Price: $".formatted("ID", "Type", "Title", "Author", "In stock:"));
 
-        //typeTextField.setFocusable(false);
-
+        // right click menu items
         JPopupMenu edit = new JPopupMenu("Edit");
         inventoryList.add(edit);
         JMenuItem restock = new JMenuItem("Restock");
         JMenuItem remove = new JMenuItem("Remove");
+        JMenuItem addToOrder = new JMenuItem("Add to order");
 
         JPopupMenu add = new JPopupMenu("Add");
         JMenuItem restockLabel = new JMenuItem("Restock");
@@ -89,6 +99,7 @@ public class Form {
         edit.add(restockLabel);
         edit.add(restockAmount);
         edit.add(remove);
+        edit.add(addToOrder);
 
 
         inventoryList = new JList<>(inventoryModel);
@@ -321,6 +332,29 @@ public class Form {
             }
         });
 
+        addToOrder.addActionListener(e -> {
+
+            if (memberChooser.getSelectedIndex() == 0) {
+                assert false;
+                order.set(orderRef);
+                order.get().setMember(new Membership()); // if guest member is chosen
+            } else {
+                assert false;
+                order.set((memberModel.get(memberChooser.getSelectedIndex() - 1)).getOrder()); // this is GNARLY
+                // so every order has a member ^
+                // and ever member has an order ^
+                // so we can switch between members and orders ^
+                order.get().setMember(memberModel.get(memberChooser.getSelectedIndex() - 1)); // get chosen member
+            }
+
+            order.get().addToOrder(inventoryList.getSelectedValue()); // add selected item to order
+            purchaseModel.addElement(inventoryList.getSelectedValue()); // add item to list that shows order
+            System.out.println(order);
+            purchaseList.updateUI();
+
+
+        });
+
         saveButton.addActionListener(e -> {
 
             try {
@@ -405,19 +439,19 @@ public class Form {
             boolean stillContinue = true;
 
             // check if we already have member
-            for(int i = 0; i < memberModel.size(); i++) {
-                if(Objects.equals(memberModel.get(i).getMemberPhone(), phoneNumberField.getText().replaceAll("-", ""))) {
+            for (int i = 0; i < memberModel.size(); i++) {
+                if (Objects.equals(memberModel.get(i).getMemberPhone(), phoneNumberField.getText().replaceAll("-", ""))) {
                     stillContinue = false;
                     debugField.setText("Phone number is already in use."); // show debug
                 }
-                if(Objects.equals(memberModel.get(i).getMemberEmail(), emailField.getText())) {
+                if (Objects.equals(memberModel.get(i).getMemberEmail(), emailField.getText())) {
                     stillContinue = false;
                     debugField.setText("Email is already in use."); // show debug
                 }
             }
 
             // only adds member if we don't already have a member registered by phone number or email
-            if(stillContinue) {
+            if (stillContinue) {
                 Members.members.add(new Membership(
                         isPremium.isSelected(),
                         firstNameField.getText(),
@@ -455,6 +489,36 @@ public class Form {
                 switchToMembers();
             }
         });
+        purchaseTab.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                super.componentShown(e);
+                switchToPurchase();
+            }
+        });
+    }
+
+    @SuppressWarnings("BoundFieldAssignment")
+    private void switchToPurchase() {
+
+        switchToInventory(); // display inventory over member list
+        memberChooser.removeAllItems(); // clear list of members before adding new
+
+        ArrayList<String> membersList = new ArrayList<>(); // array list of members
+
+        membersList.add("Guest Member"); // add default guest member
+
+        for (Membership member : Members.members) {
+            membersList.add(member.getMemberFirstName() + " " + member.getMemberLastName()); // first name and last name
+        }
+
+        for (String s : membersList) {
+            memberChooser.addItem(s);
+        }
+
+        purchaseList = new JList<>(purchaseModel);
+
+
     }
 
     // updates members pane
@@ -469,7 +533,7 @@ public class Form {
     }
 
     private void switchToMembers() {
-        middlePane.add(membersList);
+        middlePane.add(membersList); // add window back keeps it correct size
         membersList.setVisible(true);
         inventoryList.setVisible(false);
         membersList.setBackground(new Color(255, 255, 255));
@@ -479,6 +543,7 @@ public class Form {
     }
 
     private void switchToInventory() {
+        middlePane.add(inventoryList); // add window back keeps it correct size
         membersList.setVisible(false);
         typeTextField.setText("%10s | %4s | %-40s | %-25s | %-12s  | Price: $".formatted("ID", "Type", "Title", "Author", "In stock:"));
         inventoryList.setVisible(true);
