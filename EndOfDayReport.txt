@@ -1,8 +1,8 @@
 |End Of Day Report|
-Time of report: 04/28/2022, 01:26:20
+Time of report: 04/28/2022, 01:41:58
 Total revenue: $0.00
 Total sales: 0
-Total members registered: 0
+Total members registered: 1
 
 Items purchased:
         ID | Type | Title                | Author                    

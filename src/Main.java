@@ -55,7 +55,6 @@ public class Main {
     // reads inventory off a file
     public static void readInInventory() throws FileNotFoundException {
 
-        System.out.print("Enter file path for inventory: ");
         //Scanner reader = new Scanner(new File(new Scanner(System.in).nextLine()));
 
         inventoryFile = gui.findFile();

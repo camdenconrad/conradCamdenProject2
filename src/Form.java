@@ -93,11 +93,9 @@ public class Form {
         // right click menu items
         JPopupMenu edit = new JPopupMenu("Edit");
         inventoryList.add(edit);
-        JMenuItem restock = new JMenuItem("Restock");
         JMenuItem remove = new JMenuItem("Remove");
         JMenuItem addToOrder = new JMenuItem("Add to order");
 
-        JPopupMenu add = new JPopupMenu("Add");
         JMenuItem restockLabel = new JMenuItem("Restock");
         restockLabel.setEnabled(false);
 
@@ -106,6 +104,10 @@ public class Form {
         edit.add(restockAmount);
         edit.add(remove);
         edit.add(addToOrder);
+
+        JPopupMenu removeFromOrder = new JPopupMenu();
+        JMenuItem removeItem = new JMenuItem("Remove");
+        removeFromOrder.add(removeItem);
 
 
         inventoryList = new JList<>(inventoryModel);
@@ -129,10 +131,6 @@ public class Form {
                 }
 
                 mainContainer.updateUI(); // updates main UI
-
-                if (inventoryModel.size() == 0) {
-                    // want to show that there's nothing in the inventory
-                }
 
                 // calls sorter based on sort selection
                 //ID
@@ -313,7 +311,7 @@ public class Form {
                             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                                 try {
                                     inventory.restockProduct(inventoryList.getSelectedValue().getId(), Integer.parseInt(restockAmount.getText()));
-                                } catch (NumberFormatException ignored) {
+                                } catch (NumberFormatException | NullPointerException ignored) {
                                     restockAmount.setText(null);
                                 }
                                 restockAmount.setText(null);
@@ -334,12 +332,42 @@ public class Form {
 
         });
 
+        purchaseList.addMouseListener(new MouseAdapter() {
+            int x; // mouse x location on screen
+            int y;// mouse y location on screen
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+
+                // only provides menu when mouse is right click
+                if (SwingUtilities.isRightMouseButton(e) && e.getClickCount() == 1) {
+
+                    x = e.getX();
+                    y = e.getY();
+                    removeFromOrder.show(purchaseList, x, y); // shows popup
+
+                }
+            }
+
+
+        });
+
+        // remove item from order
+//        removeItem.addActionListener(e -> {
+//            try {
+//                order.get().subtractFromOrder((purchaseList.getSelectedValue()); // removes item from purchase
+//            } catch (ArrayIndexOutOfBoundsException ignored){}
+//        });
+
         // remove item from inventory
         remove.addActionListener(e -> {
-            int c = JOptionPane.showConfirmDialog(remove, "Are you sure you want to remove " + "\"" + inventoryList.getSelectedValue().getName() + "\"?");
-            if (c == JOptionPane.YES_OPTION) { // check if user is sure about removing
-                inventoryList.getSelectedValue().setInventory(0); // removes inventory - sets inventory to 0, thread automatically removes it
-            }
+            try {
+                int c = JOptionPane.showConfirmDialog(remove, "Are you sure you want to remove " + "\"" + inventoryList.getSelectedValue().getName() + "\"?");
+                if (c == JOptionPane.YES_OPTION) { // check if user is sure about removing
+                    inventoryList.getSelectedValue().setInventory(0); // removes inventory - sets inventory to 0, thread automatically removes it
+                }
+            } catch(NullPointerException ignored){}
         });
 
         addToOrder.addActionListener(e -> {
@@ -355,12 +383,13 @@ public class Form {
                 // so we can switch between members and orders ^
                 order.get().setMember(memberModel.get(memberChooser.getSelectedIndex() - 1)); // get chosen member
             }
-
+            try {
             if (inventoryList.getSelectedValue().inventory >= amountInOrder()) {
-                order.get().addToOrder(inventoryList.getSelectedValue()); // add selected item to order
+                    order.get().addToOrder(inventoryList.getSelectedValue()); // add selected item to order
             } else {
                 debugField.setText("Sold out");
             }
+            } catch(NullPointerException ignored){}
 
             updatePurchaseList(); // update
 
@@ -510,12 +539,9 @@ public class Form {
                 switchToPurchase();
             }
         });
-        memberChooser.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updatePurchaseList();
-                System.err.println("Updated order list UI");
-            }
+        memberChooser.addActionListener(e -> {
+            updatePurchaseList();
+            System.err.println("Updated order list UI");
         });
         // completes order
         completeOrder.addActionListener(new ActionListener() {
@@ -786,10 +812,6 @@ public class Form {
         return mainContainer;
     }
 
-    public void setProgress(int value) {
-        progressBar1.setValue(value);
-    }
-
     public int getSorter() {
         return sorterField.getSelectedIndex();
     }
@@ -867,9 +889,7 @@ public class Form {
             orderRef.getArray().clear();
             updatePurchaseList(); // update UI
 
-        } catch (NullPointerException ignored) {
-            System.out.println("File manager closed.");
-        } catch (IOException ignored) {
+        } catch (NullPointerException | IOException ignored) {
         }
     }
 }
